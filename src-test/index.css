@@ -1,0 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
+
+body { 
+  margin: 0;
+  font-family: Inter, sans-serif;
+}
+
+
+.logo {
+  width: 50px;
+  
+}
