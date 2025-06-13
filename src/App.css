@@ -149,6 +149,22 @@ ul.ingredients-list > li {
 }
 
 
+
+/* Recipe section */
+.suggested-recipe-section{
+  flex-basis: 100%;
+  margin-top: 40px;
+  max-width:1300px;
+  color: #475467;
+  line-height: 28px;
+  font-size: 1.125em;
+  font-weight: 400;
+}
+
+.suggested-recipe-container ul li, .suggested-recipe-container ol li {
+    margin-bottom: 8px;
+}
+
 @media screen and (max-width: 576px) {
   .get-recipe-container {
     
@@ -157,9 +173,3 @@ ul.ingredients-list > li {
 }
 
 
-/* Recipe section */
-.recipe-section{
-  flex-basis: 100%;
-  margin-top: 40px;
-  max-width:1300px;
-}
