@@ -1,17 +1,23 @@
 import { useState } from "react";
+import IngredientsList from "./IngredientsList";
+import LlmRecipe from "./LlmRecipe";
 
 export default function Main() {
     const [ingredients, setIngredients] = useState([]);
+    const [recipeShown, setRecipeShow ] = useState(false);
+
 
     const handleIngredientSubmit = (formData) => {
         setIngredients(prevIngredients => [...prevIngredients, formData.get("ingredient")]);
         console.log('form submitted');
     }
+
+    const toggleRecipeShown = () => {
+        setRecipeShow(prev => !prev);
+    }
     
-    const ingredientsListItems = ingredients.map((ingredient) => (
-                    <li key={ingredient}>{ingredient}</li>
-                ));
-    console.log(window.innerWidth);
+
+
     return (
         <main>
             <form action={handleIngredientSubmit} className="add-ingredients-form">
@@ -23,22 +29,13 @@ export default function Main() {
                 />
                 <button>{window.innerWidth > 350 ? "Add " : ""}Ingredient</button>
             </form>
-            <section className="ingredients-section">
-                <div className="ingredients-container">
-                    <h2>Leftover Ingredients:</h2>
-                    <ul className="ingredients-list" aria-live="polite">
-                        {ingredientsListItems}
-                    </ul>
-                </div>
-                <div className="get-recipe-container">
-                    <div>
-                        <h3>Ready for a recipe?</h3>
-                        <p> Ask AI to create a recipe from your leftover ingredients.</p>
-                    </div>
-                    <button>Generate Recipe</button>
-                </div>
-            </section>
+            {ingredients.length > 0 ? 
+                <IngredientsList ingredients={ingredients} handleRecipe={toggleRecipeShown}/>
+            :null}
+            {recipeShown ?
+                <LlmRecipe/>
+            : null}
             
         </main>
     )
-}
+}``
