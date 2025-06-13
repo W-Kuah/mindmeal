@@ -16,8 +16,6 @@ export default function Main() {
         setRecipeShow(prev => !prev);
     }
     
-
-
     return (
         <main>
             <form action={handleIngredientSubmit} className="add-ingredients-form">
