@@ -1,5 +1,5 @@
 export default function IngredientsList(props) {
-    const {ingredients, handleRecipe} = props;
+    const {ingredients, getRecipe} = props;
 
     const ingredientsListItems = ingredients.map((ingredient) => (
                     <li key={ingredient}>{ingredient}</li>
@@ -19,7 +19,7 @@ export default function IngredientsList(props) {
                                 <h3>Ready for a recipe?</h3>
                                 <p> Ask AI to create a recipe from your leftover ingredients.</p>
                             </div>
-                            <button onClick={handleRecipe}>Generate Recipe</button>                     
+                            <button onClick={getRecipe}>Generate Recipe</button>                     
                         </div> 
                     : 
                         <div className="general-container">

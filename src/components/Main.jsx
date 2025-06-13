@@ -1,10 +1,13 @@
 import { useState } from "react";
 import IngredientsList from "./IngredientsList";
 import LlmRecipe from "./LlmRecipe";
+import getRecipeFromLLM from "../hooks/ai";
+import cooking_gif from "../assets/cooking-loading.gif";
 
 export default function Main() {
     const [ingredients, setIngredients] = useState([]);
-    const [recipeShown, setRecipeShow ] = useState(false);
+    const [recipe, setRecipe ] = useState("");
+    const [isRecipeLoading, setIsRecipeLoading] = useState(false);
 
 
     const handleIngredientSubmit = (formData) => {
@@ -12,8 +15,11 @@ export default function Main() {
         console.log('form submitted');
     }
 
-    const toggleRecipeShown = () => {
-        setRecipeShow(prev => !prev);
+    const getRecipe = async () => {
+        setIsRecipeLoading(true);
+        const recipeMd = await getRecipeFromLLM(ingredients);
+        setIsRecipeLoading(false);
+        setRecipe(recipeMd);
     }
     
     return (
@@ -28,11 +34,11 @@ export default function Main() {
                 <button>{window.innerWidth > 350 ? "Add " : ""}Ingredient</button>
             </form>
             {ingredients.length > 0 ? 
-                <IngredientsList ingredients={ingredients} handleRecipe={toggleRecipeShown}/>
+                <IngredientsList ingredients={ingredients} getRecipe={getRecipe}/>
             :null}
-            {recipeShown ?
-                <LlmRecipe/>
-            : null}
+            {isRecipeLoading ? <img src={cooking_gif} /> : (recipe != '' ?
+                <LlmRecipe recipe={recipe}/>
+            : null)}
             
         </main>
     )

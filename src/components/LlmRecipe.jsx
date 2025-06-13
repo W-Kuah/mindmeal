@@ -1,7 +1,8 @@
-export default function LlmRecipe() {
+export default function LlmRecipe(props) {
+    const {recipe} = props;
     return (
         <>
-            <h1>LLM Recipe</h1> 
+            {recipe}
         </>
     );
 }
