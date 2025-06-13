@@ -68,6 +68,30 @@ main {
 }
 
 
+/* Animation Keyframes */
+
+@keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+}
+
+@keyframes growIn {
+    from {
+      opacity: 0;
+      transform: scaleY(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+}
+
 /* Ingredients bullet points */
 
 .ingredients-section { 
@@ -82,6 +106,10 @@ main {
   min-width: 260px;
 }
 
+.ingredients-container h2 {
+  animation: growIn 0.5s ease-in-out forwards;
+}
+
 
 ul.ingredients-list {
   margin-bottom: 48px;
@@ -90,6 +118,16 @@ ul.ingredients-list {
 ul.ingredients-list > li {
   color: #475467;
   line-height: 28px;
+  opacity: 0;
+  
+}
+
+ul.ingredients-list > li:first-child {
+  animation: slideIn 0.3s ease-in-out 0.5s forwards;
+}
+
+ul.ingredients-list > li + li {
+  animation: slideIn 0.3s ease-in-out forwards;
 }
 
 
@@ -143,11 +181,45 @@ ul.ingredients-list > li {
   
 }
 
-
 .get-recipe-container button:hover{
     background: #cf6a48;
 }
 
+@keyframes button-loading-spinner {
+    from {
+      transform: rotate(0turn);
+    }
+  
+    to {
+      transform: rotate(1turn);
+    }
+}
+button.submitting-disabled {
+  cursor: none;
+  background: grey;
+}
+
+button.submitting-disabled::after{
+    position: absolute;
+    content: "";
+    width: 16px;
+    height: 16px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 4px solid transparent;
+    border-top-color: black;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;   
+}
+
+
+/* Loading Styling */
+.loading-animation {
+  margin-top: 100px;
+}
 
 
 /* Recipe section */
@@ -166,6 +238,9 @@ ul.ingredients-list > li {
 }
 
 @media screen and (max-width: 576px) {
+
+  /* Get recipe section */
+
   .get-recipe-container {
     
     padding: 10px  12px;

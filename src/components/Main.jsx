@@ -1,8 +1,9 @@
 import { useState } from "react";
 import IngredientsList from "./IngredientsList";
 import LlmRecipe from "./LlmRecipe";
-import getRecipeFromLLM from "../hooks/ai";
+import {getRecipeFromLLM} from "../hooks/ai";
 import cooking_gif from "../assets/cooking-loading.gif";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Main() {
     const [ingredients, setIngredients] = useState([]);
@@ -11,7 +12,7 @@ export default function Main() {
 
 
     const handleIngredientSubmit = (formData) => {
-        setIngredients(prevIngredients => [...prevIngredients, formData.get("ingredient")]);
+        setIngredients(prevIngredients => [...prevIngredients, {id: uuidv4(), value:formData.get("ingredient")}]);
         console.log('form submitted');
     }
 
@@ -20,6 +21,7 @@ export default function Main() {
         const recipeMd = await getRecipeFromLLM(ingredients);
         setIsRecipeLoading(false);
         setRecipe(recipeMd);
+        console.log(recipeMd);
     }
     
     return (
@@ -33,11 +35,10 @@ export default function Main() {
                 />
                 <button>{window.innerWidth > 350 ? "Add " : ""}Ingredient</button>
             </form>
-            {ingredients.length > 0 ? 
-                <IngredientsList ingredients={ingredients} getRecipe={getRecipe}/>
-            :null}
-            {isRecipeLoading ? <img src={cooking_gif} /> : (recipe != '' ?
-                <LlmRecipe recipe={recipe}/>
+            <IngredientsList ingredients={ingredients} getRecipe={getRecipe} isLoading={isRecipeLoading}/>
+            {isRecipeLoading ? 
+                <img src={cooking_gif} className="loading-animation" /> : (recipe != '' 
+                    ? <LlmRecipe recipe={recipe}/>
             : null)}
             
         </main>
