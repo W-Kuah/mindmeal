@@ -81,14 +81,12 @@ main {
     }
 }
 
-@keyframes growIn {
+@keyframes fadeIn {
     from {
       opacity: 0;
-      transform: scaleY(0.5);
     }
     to {
       opacity: 1;
-      transform: scaleY(1);
     }
 }
 
@@ -107,7 +105,7 @@ main {
 }
 
 .ingredients-container h2 {
-  animation: growIn 0.5s ease-in-out forwards;
+  animation: fadeIn 0.8s ease-in-out forwards;
 }
 
 
@@ -176,44 +174,33 @@ ul.ingredients-list > li + li {
   padding: 8px 17px;
   font-family: Inter, sans-serif;
   font-size: 0.875em;
+  font-weight: 500;
   cursor: pointer;
+  min-width: 100px;
+  height: 50px;
 
   
 }
 
-.get-recipe-container button:hover{
+.get-recipe-container button:not(.submitting-disabled):hover{
     background: #cf6a48;
 }
 
-@keyframes button-loading-spinner {
-    from {
-      transform: rotate(0turn);
-    }
-  
-    to {
-      transform: rotate(1turn);
-    }
-}
 button.submitting-disabled {
-  cursor: none;
-  background: grey;
+  cursor: not-allowed;
+  background: #FAFAF8;
 }
 
-button.submitting-disabled::after{
-    position: absolute;
-    content: "";
-    width: 16px;
-    height: 16px;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    border: 4px solid transparent;
-    border-top-color: black;
-    border-radius: 50%;
-    animation: button-loading-spinner 1s ease infinite;   
+.loader {
+  justify-self: center;
+  width: 30px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side,#6B7280 90%,#b1a4a400) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1s steps(4) infinite;
 }
+@keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
+
 
 
 /* Loading Styling */

@@ -24,7 +24,12 @@ export default function IngredientsList(props) {
                                 <h3>Ready for a recipe?</h3>
                                 <p> Ask AI to create a recipe from your leftover ingredients.</p>
                             </div>
-                            <button onClick={getRecipe} className={isLoading ? "submitting-disabled" : ""}>{isLoading ? "" : "Generate Recipe"}</button>                     
+                            <button 
+                                onClick={getRecipe} 
+                                className={isLoading ? "submitting-disabled" : ""}
+                                disabled={isLoading ? true : false}
+                            >
+                                {isLoading ? <div className="loader"></div>:"Generate Recipe"}</button>                     
                         </div> 
                     : 
                         <div className="general-container">
