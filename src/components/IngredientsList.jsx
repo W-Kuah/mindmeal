@@ -12,7 +12,7 @@ export default function IngredientsList(props) {
                     : 
                     <>
                         <div 
-                            className={`ingredients-containe ${isIngredientsExiting ? 'box-exit' : ''}`}
+                            className={`ingredients-container ${isIngredientsExiting ? 'box-exit' : ''}`}
                             onAnimationEnd={handleResetEnd}
                         >
                             <h2>Ingredients:</h2>

@@ -83,7 +83,6 @@ export default function Main() {
 
     const handleIngredientsReset = () => {
         setIsIngredientsExiting(true);
-
     }
 
     const handleResetEnd = () => {

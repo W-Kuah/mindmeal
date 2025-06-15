@@ -1,9 +1,16 @@
-/* eslint-disable no-unused-vars */
+
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LlmRecipe(props) {
     const { recipe, isRecipeExiting, handleResetEnd } = props;
+
+    const [isAnimating, setAnimating] = useState(true);
+
+    const handleComplete = () => {
+        setAnimating(false);
+    }
 
     // Variants for animation
     const containerVariants = {
@@ -39,17 +46,17 @@ export default function LlmRecipe(props) {
 
     // Create animated components for markdown elements
     const components = {
-        pre: ({ node, ...props }) => <motion.p variants={childVariants} {...props} />,
-        p: ({ node, ...props }) => <motion.p variants={childVariants} {...props} />,
-        h1: ({ node, ...props }) => <motion.h1 variants={childVariants} {...props} />,
-        h2: ({ node, ...props }) => <motion.h2 variants={childVariants} {...props} />,
-        h3: ({ node, ...props }) => <motion.h3 variants={childVariants} {...props} />,
-        ul: ({ node, ...props }) => <motion.ul variants={childVariants} {...props} />,
-        ol: ({ node, ...props }) => <motion.ol variants={childVariants} {...props} />,
-        li: ({ node, ...props }) => <motion.li variants={childVariants} {...props} />,
-        blockquote: ({ node, ...props }) => <motion.blockquote variants={childVariants} {...props} />,
-        strong: ({ node, ...props }) => <motion.strong variants={childVariants} {...props} />,
-        em: ({ node, ...props }) => <motion.em variants={childVariants} {...props} />,
+        pre: ({ node, ...props }) => <motion.p variants={childVariants} layout="size" {...props} />,
+        p: ({ node, ...props }) => <motion.p variants={childVariants} layout="size" {...props} />,
+        h1: ({ node, ...props }) => <motion.h1 variants={childVariants} layout="size" {...props} />,
+        h2: ({ node, ...props }) => <motion.h2 variants={childVariants} layout="size" {...props} />,
+        h3: ({ node, ...props }) => <motion.h3 variants={childVariants} layout="size" {...props} />,
+        ul: ({ node, ...props }) => <motion.ul variants={childVariants} layout="size" {...props} />,
+        ol: ({ node, ...props }) => <motion.ol variants={childVariants} layout="size" {...props} />,
+        li: ({ node, ...props }) => <motion.li variants={childVariants} layout="size" {...props} />,
+        blockquote: ({ node, ...props }) => <motion.blockquote variants={childVariants} layout="size" {...props} />,
+        strong: ({ node, ...props }) => <motion.strong variants={childVariants} layout="size" {...props} />,
+        em: ({ node, ...props }) => <motion.em variants={childVariants} layout="size" {...props} />,
     };
 
     return (
@@ -58,7 +65,7 @@ export default function LlmRecipe(props) {
         onAnimationEnd={handleResetEnd}
         >
             <div className='title'>
-                <h2 class>MindMeal Suggests:</h2>
+                <h2>MindMeal Suggests:</h2>
                 <span className="block"></span>
             </div>
             
@@ -66,9 +73,11 @@ export default function LlmRecipe(props) {
                 <motion.div
                     key={recipe}
                     variants={containerVariants}
-                    initial="hidden"
+                    initial={isAnimating ? 'hidden' : 'visible'}
                     animate="visible"
-                    exit="exit"
+                    exit="hidden"
+                    layout={false}
+                    onAnimationComplete={handleComplete}
                 >
                     <ReactMarkdown components={components}>
                         {recipe}
