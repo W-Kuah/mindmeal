@@ -1,5 +1,5 @@
 export default function IngredientsList(props) {
-    const {ingredients, getRecipe, isLoading, handleReset} = props;
+    const {ingredients, getRecipe, isLoading, handleReset, isIngredientsExiting, handleResetEnd, isRecipeExiting} = props;
 
     const ingredientsListItems = ingredients.map((ingredientObj) => (
                     <li key={ingredientObj.id}>{ingredientObj.value}</li>
@@ -11,7 +11,10 @@ export default function IngredientsList(props) {
                         null 
                     : 
                     <>
-                        <div className="ingredients-container">
+                        <div 
+                            className={`ingredients-containe ${isIngredientsExiting ? 'box-exit' : ''}`}
+                            onAnimationEnd={handleResetEnd}
+                        >
                             <h2>Ingredients:</h2>
                             <ul className="ingredients-list" aria-live="polite">
                                 {ingredientsListItems}
@@ -30,10 +33,10 @@ export default function IngredientsList(props) {
                             </div>
                             <button 
                                 onClick={getRecipe} 
-                                className={isLoading ? "submitting-disabled" : ""}
-                                disabled={isLoading ? true : false}
+                                className={isLoading || isRecipeExiting ? "submitting-disabled" : ""}
+                                disabled={isLoading || isRecipeExiting ? true : false}
                             >
-                                {isLoading ? <div className="loader"></div>:"Generate Recipe"}</button>                     
+                                {isLoading || isRecipeExiting ? <div className="loader"></div>:"Generate Recipe"}</button>                     
                         </div> 
                     : 
                         <div className="general-container">

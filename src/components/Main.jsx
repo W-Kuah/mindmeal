@@ -58,9 +58,13 @@ export default function Main() {
     const [ingredients, setIngredients] = useState([]);
     const [recipe, setRecipe ] = useState(''); 
     const [isRecipeLoading, setIsRecipeLoading] = useState(false);
-    const [isClearing, setIsClearing] = useState(false);
+    const [isIngredientsExiting, setIsIngredientsExiting] = useState(false);
+    const [isLoaderExiting, setIsLoaderExiting] = useState(false);
+    const [isRecipeExiting, setIsRecipeExiting] = useState(false);
 
     const containerAnim = useRef(null);
+
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     useEffect(() => {
         const animation = lottie.loadAnimation({
@@ -77,22 +81,45 @@ export default function Main() {
         setIngredients(prevIngredients => [...prevIngredients, {id: uuidv4(), value:formData.get("ingredient")}]);
     }
 
-    const handleReset = () => {
-        setIngredients([]);
+    const handleIngredientsReset = () => {
+        setIsIngredientsExiting(true);
+
+    }
+
+    const handleResetEnd = () => {
+        if (isIngredientsExiting) {
+            setIngredients([]);
+            setIsIngredientsExiting(false);
+        } else if (isLoaderExiting) {
+            setIsRecipeLoading(false);
+            setIsLoaderExiting(false);
+        } else if (isRecipeExiting) {
+            setIsRecipeExiting(false);
+            setIsRecipeLoading(true);
+        }
     }
 
     const getRecipe = async () => {
-        setIsRecipeLoading(true);
+        if (recipe != '') {
+            setIsRecipeExiting(true);
+        } else {
+            setIsRecipeLoading(true);
+        }
         const recipeMd = await getRecipeFromLLM(ingredients);
-        setIsRecipeLoading(false);
+
+        // await delay(3000);
         // setRecipe(testRecipe);
+
         setRecipe(recipeMd);
-        // console.log(recipeMd);
+
+        setIsLoaderExiting(true);
+        // console.log(recipe);
     }
-    
+
+
     return (
         <main>
-            <form action={handleIngredientSubmit} className="add-ingredients-form">
+            <form action={handleIngredientSubmit} className='add-ingredients-form'>
                 <input
                     name="ingredient"
                     type="text"
@@ -107,14 +134,24 @@ export default function Main() {
                 ingredients={ingredients} 
                 getRecipe={getRecipe} 
                 isLoading={isRecipeLoading}
-                handleReset={handleReset}
+                handleReset={handleIngredientsReset}
+                isIngredientsExiting={isIngredientsExiting}
+                handleResetEnd={handleResetEnd}
+                isRecipeExiting={isRecipeExiting}
             />
             {isRecipeLoading ? 
-                <div className="loading-container">
+                <div 
+                    className={`loading-container ${isLoaderExiting ? 'box-exit' : ''}`}
+                    onAnimationEnd={handleResetEnd}
+                >
                     <div ref={containerAnim} className="loading-animation"></div> 
                 </div> 
                 : (recipe != '' 
-                    ? <LlmRecipe recipe={recipe}/>
+                    ? <LlmRecipe
+                        recipe={recipe}
+                        handleResetEnd={handleResetEnd}
+                        isRecipeExiting={isRecipeExiting}
+                    />
             : null)}
             
         </main>

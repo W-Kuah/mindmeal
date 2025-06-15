@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LlmRecipe(props) {
-    const { recipe } = props;
+    const { recipe, isRecipeExiting, handleResetEnd } = props;
 
     // Variants for animation
     const containerVariants = {
@@ -53,7 +53,10 @@ export default function LlmRecipe(props) {
     };
 
     return (
-        <section className="suggested-recipe-section">
+        <section 
+        className={`suggested-recipe-section ${isRecipeExiting ? 'box-exit' : ''}`}
+        onAnimationEnd={handleResetEnd}
+        >
             <div className='title'>
                 <h2 class>MindMeal Suggests:</h2>
                 <span className="block"></span>

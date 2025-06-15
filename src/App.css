@@ -204,7 +204,7 @@ main {
 
 
 ul.ingredients-list {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 ul.ingredients-list > li {
@@ -231,7 +231,7 @@ ul.ingredients-list > li + li {
   padding: 8px 12px;
   font-family: Inter, sans-serif;
   font-weight: 700;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   cursor: pointer;
   opacity: 0;
   animation: slideUp 0.5s ease-in-out 1s forwards;
@@ -428,6 +428,10 @@ footer {
     animation: reveal 0.1s forwards;
     display: inline-block;
     min-width: 0.4em;
+}
+
+.box-exit {
+  animation: fadeOut 0.5s ease-in-out forwards;
 }
 
 
