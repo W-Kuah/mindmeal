@@ -28,7 +28,6 @@ export default function LlmRecipe(props) {
 }
 
 const RecipeDetails = memo(({recipeDetailsInfo}) => {
-    console.log('RecipeDetails Rendered');
     // Variants for animation
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -83,6 +82,7 @@ const RecipeDetails = memo(({recipeDetailsInfo}) => {
     return (
         <AnimatePresence mode="wait">
                 <motion.div
+                    className="recipe-details"
                     viewport={{ once: true }}
                     variants={containerVariants}
                     initial='hidden'

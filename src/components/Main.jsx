@@ -124,11 +124,31 @@ export default function Main() {
         } else {
             setIsRecipeLoading(true);
         }
-        const recipeMd = await getRecipeFromLLM(ingredients);
-        setRecipe(recipeMd);
 
-        // await testFormat()
+        try {
+            
+            const recipeMdResponse = await fetch(
+                '/.netlify/functions/generate-recipe', {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ingredientsObjArr: ingredients})
+                }
+            )
+            if (!recipeMdResponse.ok) {
+                const errorData = await recipeMdResponse.json();
 
+                console.error(errorData.stack);
+                throw new Error(`${recipeMdResponse.status} ${recipeMdResponse.statusText}: ${errorData.errorMessage}`);
+            }
+            const recipeMdData = await recipeMdResponse.json();
+
+            setRecipe(recipeMdData.recipe);
+            console.log(recipeMdData);
+
+            // await testFormat()
+        } catch (error) {
+            console.error(error);
+        }
         setIsLoaderExiting(true);
     }
 

@@ -3,7 +3,7 @@ import { generateText } from 'ai';
 
 
 const SYSTEM_PROMPT = `
-You are an assistant that receives a list of ingredients that a user has and suggests a recipe they could make with some or all of those ingredients. You don't need to use every ingredient they mention in your recipe. The recipe can include additional ingredients they didn't mention, but try not to include too many extra ingredients. Format your response in markdown to make it easier to render to a web page. Don't use 'h1' or 'h2' HTML's equivalent in the markdown. Always starts with the title of the food.
+You are an assistant that receives a list of ingredients that a user has and suggests a recipe they could make with some or all of those ingredients. You don't need to use every ingredient they mention in your recipe. The recipe can include additional ingredients they didn't mention, but try not to include too many extra ingredients. Format your response in markdown to make it easier to render to a web page. If using "#" always use 3 or more. Always starts with the title of the food.
 `
 
 const openrouter = createOpenRouter({ apiKey: import.meta.env.VITE_OPEN_ROUTER_ACCESS_TOKEN});
