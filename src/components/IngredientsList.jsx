@@ -1,5 +1,5 @@
 export default function IngredientsList(props) {
-    const {ingredients, getRecipe, isLoading, handleReset, isIngredientsExiting, handleResetEnd, isRecipeExiting} = props;
+    const {ingredients, getRecipe, isLoading, handleReset, isIngredientsExiting, handleResetEnd, isRecipeExiting, isCooldownActive, timeCount} = props;
 
     const ingredientsListItems = ingredients.map((ingredientObj) => (
                     <li key={ingredientObj.id}>{ingredientObj.value}</li>
@@ -33,10 +33,10 @@ export default function IngredientsList(props) {
                             </div>
                             <button 
                                 onClick={getRecipe} 
-                                className={isLoading || isRecipeExiting ? "submitting-disabled" : ""}
-                                disabled={isLoading || isRecipeExiting ? true : false}
+                                className={isLoading || isRecipeExiting || isCooldownActive ? "submitting-disabled" : ""}
+                                disabled={isLoading || isRecipeExiting || isCooldownActive ? true : false}
                             >
-                                {isLoading || isRecipeExiting ? <div className="loader"></div>:"Generate Recipe"}</button>                     
+                                {isLoading || isRecipeExiting ? <div className="loader"></div>: (isCooldownActive ? timeCount.toString() : "Generate Recipe")}</button>                     
                         </div> 
                     : 
                         <div className="general-container">

@@ -1,18 +1,34 @@
 /* eslint-disable no-unused-vars */
 
-import { useState } from "react";
+import { memo, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LlmRecipe(props) {
-    const { recipe, isRecipeExiting, handleResetEnd } = props;
+    const { recipe, isRecipeExiting, handleRecipeRedo } = props;
 
-    const [isAnimating, setAnimating] = useState(true);
+    
+    const recipeDetailsInfo = useMemo(() => (recipe), [recipe]);
 
-    const handleComplete = () => {
-        setAnimating(false);
-    }
+    return (
+        <section 
+            className={`suggested-recipe-section ${isRecipeExiting ? 'box-exit' : ''}`}
+            onAnimationEnd={handleRecipeRedo}
+        >
+            <div className='title'>
+                <h2>MindMeal Suggests:</h2>
+                <span className="block"></span>
+            </div>
+            
+            <RecipeDetails
+                recipeDetailsInfo={recipeDetailsInfo}
+            />
+        </section>
+    );
+}
 
+const RecipeDetails = memo(({recipeDetailsInfo}) => {
+    console.log('RecipeDetails Rendered');
     // Variants for animation
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -32,16 +48,21 @@ export default function LlmRecipe(props) {
     const childVariants = {
         hidden: { 
             opacity: 0, 
-            y: 20 
+            x: -20 
         },
         visible: {
             opacity: 1,
-            y: 0,
+            x: 0,
             transition: { 
                 duration: 0.5,
                 staggerChildren: 0.1,
                 ease: "easeOut"
             }
+        },
+        exit: { 
+            x: 0,
+            opacity: 0,
+            transition: { duration: 0.3 }
         }
     };
 
@@ -59,32 +80,19 @@ export default function LlmRecipe(props) {
         strong: ({ node, ...props }) => <motion.strong variants={childVariants} layout="size" {...props} />,
         em: ({ node, ...props }) => <motion.em variants={childVariants} layout="size" {...props} />,
     };
-
     return (
-        <section 
-        className={`suggested-recipe-section ${isRecipeExiting ? 'box-exit' : ''}`}
-        onAnimationEnd={handleResetEnd}
-        >
-            <div className='title'>
-                <h2>MindMeal Suggests:</h2>
-                <span className="block"></span>
-            </div>
-            
-            <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait">
                 <motion.div
-                    key={recipe}
+                    viewport={{ once: true }}
                     variants={containerVariants}
-                    initial={isAnimating ? 'hidden' : 'visible'}
-                    animate="visible"
-                    exit="hidden"
-                    layout={false}
-                    onAnimationComplete={handleComplete}
+                    initial='hidden'
+                    animate='visible'
+                    exit='exit'
                 >
                     <ReactMarkdown components={components}>
-                        {recipe}
+                        {recipeDetailsInfo}
                     </ReactMarkdown>
                 </motion.div>
             </AnimatePresence>
-        </section>
     );
-}
+    })

@@ -61,6 +61,8 @@ export default function Main() {
     const [isIngredientsExiting, setIsIngredientsExiting] = useState(false);
     const [isLoaderExiting, setIsLoaderExiting] = useState(false);
     const [isRecipeExiting, setIsRecipeExiting] = useState(false);
+    const [isCooldownActive, setIsCooldownActive] = useState(false);
+    const [timeCount, setTimeCount] = useState(10);
 
     const containerAnim = useRef(null);
 
@@ -89,13 +91,31 @@ export default function Main() {
         if (isIngredientsExiting) {
             setIngredients([]);
             setIsIngredientsExiting(false);
-        } else if (isLoaderExiting) {
+        }
+    }
+
+    const handleLoaderEnd = () => {
+        if (isLoaderExiting) {
             setIsRecipeLoading(false);
             setIsLoaderExiting(false);
-        } else if (isRecipeExiting) {
+            handleCooldown(10);
+        }
+    }
+
+    const handleRecipeRedo = () => {
+        if (isRecipeExiting) {
             setIsRecipeExiting(false);
             setIsRecipeLoading(true);
         }
+    }
+
+    const handleCooldown = async (seconds) => {
+        setIsCooldownActive(true);
+        for (let i = seconds; i > 0; i--) {
+            setTimeCount(i);
+            await delay(1000);
+        }
+        setIsCooldownActive(false);
     }
 
     const getRecipe = async () => {
@@ -105,14 +125,16 @@ export default function Main() {
             setIsRecipeLoading(true);
         }
         const recipeMd = await getRecipeFromLLM(ingredients);
-
-        // await delay(3000);
-        // setRecipe(testRecipe);
-
         setRecipe(recipeMd);
 
+        // await testFormat()
+
         setIsLoaderExiting(true);
-        // console.log(recipe);
+    }
+
+    const testFormat = async () => { 
+        await delay(1000);
+        setRecipe(testRecipe);
     }
 
 
@@ -137,18 +159,20 @@ export default function Main() {
                 isIngredientsExiting={isIngredientsExiting}
                 handleResetEnd={handleResetEnd}
                 isRecipeExiting={isRecipeExiting}
+                isCooldownActive={isCooldownActive}
+                timeCount={timeCount}
             />
             {isRecipeLoading ? 
                 <div 
                     className={`loading-container ${isLoaderExiting ? 'box-exit' : ''}`}
-                    onAnimationEnd={handleResetEnd}
+                    onAnimationEnd={handleLoaderEnd}
                 >
                     <div ref={containerAnim} className="loading-animation"></div> 
                 </div> 
                 : (recipe != '' 
                     ? <LlmRecipe
                         recipe={recipe}
-                        handleResetEnd={handleResetEnd}
+                        handleRecipeRedo={handleRecipeRedo}
                         isRecipeExiting={isRecipeExiting}
                     />
             : null)}

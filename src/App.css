@@ -304,6 +304,8 @@ ul.ingredients-list > li + li {
 button.submitting-disabled {
   cursor: not-allowed;
   background: #FAFAF8;
+  color: black;
+  font-weight: bold;
 }
 
 .loader {
@@ -363,7 +365,7 @@ button.submitting-disabled {
   display: block;
 }
 
-.suggested-recipe-section h2 {
+.suggested-recipe-section .title h2 {
   -webkit-animation: mainFadeIn 1s forwards;
   -o-animation: mainFadeIn 1s forwards;
   animation: mainFadeIn 1s forwards;
