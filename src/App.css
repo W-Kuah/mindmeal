@@ -322,6 +322,9 @@ ul.ingredients-list > li + li {
   gap: 10px;
 }
 
+.invisible {
+  display: none;
+}
 
 
 button.submitting-disabled {

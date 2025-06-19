@@ -212,7 +212,6 @@ export default function Main() {
         setRecipe(testRecipe);
     }
 
-
     return (
         <main>
             <form action={handleIngredientSubmit} className='add-ingredients-form'>

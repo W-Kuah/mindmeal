@@ -50,6 +50,7 @@ export default function IngredientsList(props) {
                                     {isLoading || isRecipeExiting ? <div className="loader"></div>: (isCooldownActive ? timeCount.toString() : (status != 'success' & status != 'validated') ? "Validating ↓" :"Generate Recipe")}
                                 </button>
                                 <Turnstile 
+                                    className={(status === 'success' || status === 'validated') ? 'invisible' : ''}
                                     siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY} 
                                     options={{
                                         theme: 'light',
