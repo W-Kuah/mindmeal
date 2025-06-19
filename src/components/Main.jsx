@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import IngredientsList from "./IngredientsList";
 import LlmRecipe from "./LlmRecipe";
-import {getRecipeFromLLM} from "../hooks/ai";
 import { v4 as uuidv4 } from 'uuid';
 import lottie from "lottie-web";
 
@@ -39,19 +38,27 @@ Enjoy!
 const testIngredients = [
     {
         id: uuidv4(),
-        value: 'a',
+        value: 'Rice',
     },
     {
         id: uuidv4(),
-        value: 'b',
+        value: 'Bacon',
     },
     {
         id: uuidv4(),
-        value: 'c',
+        value: 'Cheddar cheese',
     },
     {
         id: uuidv4(),
-        value: 'd',
+        value: 'Flour',
+    },
+    {
+        id: uuidv4(),
+        value: 'Butter',
+    },
+    {
+        id: uuidv4(),
+        value: 'Spices and Herbs',
     },
 ]
 export default function Main() {
@@ -63,6 +70,9 @@ export default function Main() {
     const [isRecipeExiting, setIsRecipeExiting] = useState(false);
     const [isCooldownActive, setIsCooldownActive] = useState(false);
     const [timeCount, setTimeCount] = useState(10);
+    const [status, setStatus] = useState('required');
+    const [token, setToken] = useState('');
+    const [error, setError] = useState('');
 
     const containerAnim = useRef(null);
 
@@ -118,37 +128,82 @@ export default function Main() {
         setIsCooldownActive(false);
     }
 
+    const handleVerify = async () => {
+        if (status ==='validated') {
+            return true;
+        }
+        if (status ==='required') {
+            setError('Please validate that you are not a bot.');
+            return false;
+        } else if (status === 'expired') {
+            setError('Token has expired. Please revalidate Token.');
+        }else if ((status === 'success' || status ==='invalid'
+        ) & token != '') {
+            try {
+                const turnstileRes = await fetch(
+                    '/.netlify/functions/validate-turnstile', {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({ token: token }),
+                    }
+                );
+
+                const turnstileData = await turnstileRes.json();
+
+                if (turnstileData.success) {
+                    setError('');
+                    setStatus('validated');
+                    return true;
+                }
+                setStatus('invalid');
+                setError('Please validate that you are not a bot.');
+                console.log(turnstileData.dataDump);
+                throw new Error(`${turnstileRes.status} ${turnstileRes.statusText}: ${turnstileData.errorMessage}`)
+            } catch (error) {
+                console.error(error);
+                return false;
+            }
+            
+        } else {
+            setError('There has been an error, please refresh the page.');
+            return false;
+        }
+    }
+
     const getRecipe = async () => {
         if (recipe != '') {
             setIsRecipeExiting(true);
         } else {
             setIsRecipeLoading(true);
         }
+        const verifyResult = await handleVerify()
+        if (verifyResult) {
+            try {
+                const recipeMdResponse = await fetch(
+                    '/.netlify/functions/generate-recipe', {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({ingredientsObjArr: ingredients})
+                    }
+                );
+                if (!recipeMdResponse.ok) {
+                    const errorData = await recipeMdResponse.json();
 
-        try {
-            
-            const recipeMdResponse = await fetch(
-                '/.netlify/functions/generate-recipe', {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({ingredientsObjArr: ingredients})
+                    console.error(errorData.stack);
+                    throw new Error(`${recipeMdResponse.status} ${recipeMdResponse.statusText}: ${errorData.errorMessage}`);
                 }
-            )
-            if (!recipeMdResponse.ok) {
-                const errorData = await recipeMdResponse.json();
+                const recipeMdData = await recipeMdResponse.json();
 
-                console.error(errorData.stack);
-                throw new Error(`${recipeMdResponse.status} ${recipeMdResponse.statusText}: ${errorData.errorMessage}`);
+                setRecipe(recipeMdData.recipe);
+                // console.log(recipeMdData);
+
+                // testFormat()
+            } catch (error) {
+                console.error(error);
             }
-            const recipeMdData = await recipeMdResponse.json();
-
-            setRecipe(recipeMdData.recipe);
-            console.log(recipeMdData);
-
-            // await testFormat()
-        } catch (error) {
-            console.error(error);
         }
+
+        
         setIsLoaderExiting(true);
     }
 
@@ -181,6 +236,10 @@ export default function Main() {
                 isRecipeExiting={isRecipeExiting}
                 isCooldownActive={isCooldownActive}
                 timeCount={timeCount}
+                setStatus={setStatus}
+                status={status}
+                setToken={setToken}
+                errorMessage={error}
             />
             {isRecipeLoading ? 
                 <div 
@@ -199,4 +258,4 @@ export default function Main() {
             
         </main>
     )
-}``
+}

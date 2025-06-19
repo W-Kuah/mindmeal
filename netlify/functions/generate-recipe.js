@@ -32,6 +32,13 @@ async function getRecipeFromOPA(ingredientsString) {
 
 exports.handler = async function (event) {
 
+    if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ errorMessage: 'Method not allowed' })
+    };
+  }
+
     try {
         const { ingredientsObjArr } = JSON.parse(event.body);
         const ingredientsArr = ingredientsObjArr.map(ingredientObj => ingredientObj.value);

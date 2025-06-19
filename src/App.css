@@ -248,7 +248,7 @@ ul.ingredients-list > li + li {
 
 .general-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   min-width: 260px;
   border-radius: 8px;
@@ -266,18 +266,32 @@ ul.ingredients-list > li + li {
   justify-content: space-between;
 }
 
+.get-recipe-container .prompt-box {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 10px;
+}
+
 .get-recipe-container h3 {
   font-size: 1.125em;
   font-weight: 500;
   line-height: 24px;
-  margin-right: 10px;
 }
 
 .get-recipe-container p {
   color: #6B7280;
   font-size: 0.875em;
   line-height: 20px;
-  margin-right: 10px;
+}
+
+.get-recipe-container .errorMessage {
+  background-color: rgb(230, 122, 122);
+  color: white;
+  font-size: 0.875em;
+  padding: 5px 7.5px;
+  /* display: none; */
 }
 
 .get-recipe-container button {
@@ -293,13 +307,22 @@ ul.ingredients-list > li + li {
   cursor: pointer;
   min-width: 100px;
   height: 50px;
-
-  
 }
 
 .get-recipe-container button:not(.submitting-disabled):hover{
     background: #cf6a48;
 }
+
+.get-recipe-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 150px;
+  gap: 10px;
+}
+
+
 
 button.submitting-disabled {
   cursor: not-allowed;
@@ -441,10 +464,28 @@ footer {
 
   /* Get recipe section */
 
+
+
   .get-recipe-container {
-    
-    padding: 10px  12px;
+      flex-direction: column;
   }
+
+  .get-recipe-container .prompt-box {
+    align-self:center;
+    align-items: center;
+    margin-right: 0px;
+    margin-bottom: 25px;
+  }
+  
+
+  .get-recipe-container {
+    padding-bottom: 28px;
+  }
+
+  .general-container {
+    justify-content: center;
+  }
+
 }
 
 
