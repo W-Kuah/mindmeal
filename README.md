@@ -34,7 +34,7 @@ The application allows users to:
 - VITE_TURNSTILE_SITE_KEY ([Cloudflare](https://www.cloudflare.com/en-au/application-services/products/turnstile/))
 - VITE_TURNSTILE_SECRET_KEY
 
-5. Create your Netlify account. ([https://www.netlify.com/](https://www.netlify.com/)
+5. Create your Netlify account. ([https://www.netlify.com/](https://www.netlify.com/))
 
 6. Configure your Netlify account in your command line.
     ```
