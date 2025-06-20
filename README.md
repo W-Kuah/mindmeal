@@ -1,6 +1,6 @@
 # MindMeal
 
-This project is a recipe generator using React, HTML, CSS, and OpenRouterAI. 
+This project is a recipe generator using React, CSS, and OpenRouterAI. 
 It utilises serverless functions to protect API keys and Cloudflare Turnstiles to minimise bot interactions.
 
 ## Working Demo
