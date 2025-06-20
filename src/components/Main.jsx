@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState} from "react";
 import IngredientsList from "./IngredientsList";
 import LlmRecipe from "./LlmRecipe";
 import { v4 as uuidv4 } from 'uuid';
-import lottie from "lottie-web";
+import { Player } from '@lottiefiles/react-lottie-player';
+
 
 const testRecipe = `
     Okay, with bacon, cheese, passata, and rice, here's a recipe for **Cheesy Bacon Rice with Tomato Sauce**:
@@ -74,20 +75,8 @@ export default function Main() {
     const [token, setToken] = useState('');
     const [error, setError] = useState('');
 
-    const containerAnim = useRef(null);
-
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    useEffect(() => {
-        const animation = lottie.loadAnimation({
-            container: containerAnim.current,
-            renderer: 'svg', 
-            loop: true,
-            autoplay: true,
-            path: 'public/cooking-loading.json'
-        });
-        return () => animation.destroy();
-    }, [isRecipeLoading]);  
 
     const handleIngredientSubmit = (formData) => {
         setIngredients(prevIngredients => [...prevIngredients, {id: uuidv4(), value:formData.get("ingredient")}]);
@@ -245,7 +234,14 @@ export default function Main() {
                     className={`loading-container ${isLoaderExiting ? 'box-exit' : ''}`}
                     onAnimationEnd={handleLoaderEnd}
                 >
-                    <div ref={containerAnim} className="loading-animation"></div> 
+                    <Player
+                        src='public/cooking-loading.json'
+                        background="transparent"
+                        speed={1}
+                        controls={false}
+                        loop
+                        autoplay
+                    /> 
                 </div> 
                 : (recipe != '' 
                     ? <LlmRecipe
