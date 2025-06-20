@@ -19,7 +19,7 @@ The application allows users to:
 
 ### Installing and Running
 
-1. Clone this repository or download as a zip file
+1. Clone this repository
     ```
     git clone <your-repo-link>
     ```
