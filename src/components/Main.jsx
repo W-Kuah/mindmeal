@@ -84,7 +84,7 @@ export default function Main() {
             renderer: 'svg', 
             loop: true,
             autoplay: true,
-            path: 'src/assets/cooking-loading.json'
+            path: 'public/cooking-loading.json'
         });
         return () => animation.destroy();
     }, [isRecipeLoading]);  
