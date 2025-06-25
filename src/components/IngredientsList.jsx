@@ -1,7 +1,7 @@
 import { Turnstile } from '@marsidev/react-turnstile'
 
 export default function IngredientsList(props) {
-    const {ingredients, getRecipe, isLoading, handleReset, isIngredientsExiting, handleResetEnd, isRecipeExiting, isCooldownActive, timeCount, setStatus, status, setToken, errorMessage} = props;
+    const {ingredients, getRecipe, isLoading, handleReset, isIngredientsExiting, handleResetEnd, isRecipeExiting, isCooldownActive, timeCount, setStatus, status, setToken, errorMessage, ref} = props;
 
     const ingredientsListItems = ingredients.map((ingredientObj) => (
                     <li key={ingredientObj.id}>{ingredientObj.value}</li>
@@ -36,7 +36,7 @@ export default function IngredientsList(props) {
                     
                     {ingredients.length >= 4 ? 
                         <div className="general-container get-recipe-container">
-                            <div className="prompt-box">
+                            <div ref={ref} className="prompt-box">
                                 <h3>Ready for a recipe?</h3>
                                 <p> Ask AI to create a recipe from your ingredients.</p>
                                 {(status != 'success' & status != 'required' & status != 'validated') ? <span className="errorMessage">{errorMessage}</span> : null}

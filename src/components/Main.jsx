@@ -75,13 +75,14 @@ export default function Main() {
     const [token, setToken] = useState('');
     const [error, setError] = useState('');
 
-    const containerAnim = useRef(null);
+    const containerAnimRef = useRef(null);
+    const getRecipeRef = useRef(null)
 
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     useEffect(() => {
         const animation = lottie.loadAnimation({
-            container: containerAnim.current,
+            container: containerAnimRef.current,
             renderer: 'svg', 
             loop: true,
             autoplay: true,
@@ -89,6 +90,13 @@ export default function Main() {
         });
         return () => animation.destroy();
     }, [isRecipeLoading]);  
+
+    useEffect (() => {
+        if (isRecipeLoading && getRecipeRef.current !== null) {
+            getRecipeRef.current.scrollIntoView({behavior: "smooth"});
+        }
+        
+    }, [isRecipeLoading]);
 
     const handleIngredientSubmit = (formData) => {
         setIngredients(prevIngredients => [...prevIngredients, {id: uuidv4(), value:formData.get("ingredient")}]);
@@ -240,13 +248,14 @@ export default function Main() {
                 status={status}
                 setToken={setToken}
                 errorMessage={error}
+                ref={getRecipeRef}
             />
             {isRecipeLoading ? 
                 <div 
                     className={`loading-container ${isLoaderExiting ? 'box-exit' : ''}`}
                     onAnimationEnd={handleLoaderEnd}
                 >
-                    <div ref={containerAnim} className="loading-animation"></div> 
+                    <div ref={containerAnimRef} className="loading-animation"></div> 
                 </div> 
                 : (recipe != '' 
                     ? <LlmRecipe
